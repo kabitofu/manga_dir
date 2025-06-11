@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>漫画サイト コンテンツ管理マニュアル (最終版)</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Meiryo", "Hiragino Kaku Gothic ProN", "MS PGothic", sans-serif;
+            line-height: 1.8;
+            color: #333;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 960px;
+            margin: 20px auto;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 20px 40px;
+        }
+        header {
+            text-align: center;
+            border-bottom: 2px solid #eee;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+        }
+        h1 {
+            color: #111;
+            font-size: 2em;
+            margin: 0;
+        }
+        h2 {
+            font-size: 1.5em;
+            color: #333;
+            border-bottom: 2px solid #2563eb;
+            padding-bottom: 10px;
+            margin-top: 40px;
+        }
+        h3 {
+            font-size: 1.2em;
+            color: #444;
+            border-left: 5px solid #2563eb;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        p, li {
+            font-size: 1em;
+        }
+        code {
+            font-family: Consolas, "Courier New", monospace;
+            background-color: #eef;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-size: 0.95em;
+        }
+        .code-block {
+            background-color: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: Consolas, "Courier New", monospace;
+            white-space: pre;
+            font-size: 0.9em;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        strong, .highlight {
+            color: #d9534f;
+            font-weight: bold;
+        }
+        .note {
+            background-color: #fffbe6;
+            border-left: 5px solid #f6e05e;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 4px;
+        }
+        .success {
+            border-left-color: #34d399;
+            background-color: #f0fdf4;
+        }
+        .danger {
+            border-left-color: #f87171;
+            background-color: #fef2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>漫画サイト コンテンツ管理マニュアル</h1>
+            <p>（最終版）</p>
+        </header>
+
+        <main>
+            <section>
+                <h2>1. サイトのファイル構成</h2>
+                <p>
+                    このサイトは、主に以下のファイルで構成されています。コンテンツの追加・管理は、<code>comics</code>フォルダ内で行います。
+                </p>
+                <div class="code-block">
+(サイトのルートディレクトリ)
+├── index.php             (トップページ：作品一覧)
+├── detail.php            (作品詳細・話数一覧ページ)
+├── viewer.php            (漫画ビューアページ)
+├── header.php            (サイト共通のヘッダー・メニュー部品)
+│
+└── comics/               <-- すべての漫画コンテンツはここに入れる
+    │
+    └── (各作品のフォルダ) ...
+                </div>
+            </section>
+
+            <section>
+                <h2>2. コンテンツの追加と管理</h2>
+                <p>
+                    漫画作品や話を追加・更新する際の、推奨されるフォルダ構成とファイル命名規則です。
+                </p>
+                <div class="code-block">
+comics/
+└── 01_作品名A/             <-- 作品ごとのフォルダ
+    │
+    ├── thumbnail.jpg       <-- (推奨)作品サムネイル (正方形)
+    ├── detail.txt          <-- (任意)作品詳細テキスト
+    │
+    ├── 01_第1話/             <-- 話数ごとのフォルダ
+    │   │
+    │   ├── thumbnail.jpg   <-- (任意)話数サムネイル (正方形)
+    │   │
+    │   ├── 001.jpg         <-- 漫画ページ画像 (連番)
+    │   ├── 002.jpg
+    │   └── ...
+    │
+    └── 02_第2話/
+        │
+        └── ...
+                </div>
+            </section>
+
+            <section>
+                <h2>3. 表示順のカスタム設定（重要）</h2>
+                 <p>
+                    作品や話の表示順は、フォルダ名の付け方によって制御できます。
+                </p>
+                <h3>デフォルトの表示順</h3>
+                <p>
+                    フォルダ名に特別なルールがない場合、名前順（自然順ソート）で表示されます。（例：「第1話」「第2話」「第10話」）
+                </p>
+                <h3>表示順を厳格に指定する方法</h3>
+                <p>
+                    表示順を厳密に管理したい場合は、フォルダ名の先頭に<strong class="highlight">「数字」と「アンダースコア ( _ )」</strong>を付けます。（例: <code>01_</code>, <code>02_</code>）
+                </p>
+                <div class="note danger">
+                    <strong>【重要ルール】</strong> この番号での並び替え機能は、<strong class="highlight">その階層にあるすべてのフォルダ</strong>に「数字_」のプレフィックスが付いている場合にのみ有効になります。1つでも付いていないフォルダがあると、この機能は発動せず、通常の名前順表示に戻ります。
+                </div>
+
+                <h4>例1：作品の表示順を固定する</h4>
+                <p class="note success">
+                    <strong>良い例（すべての作品フォルダに番号を付ける）：</strong><br>
+                    <code>comics/01_最初のマンガ/</code><br>
+                    <code>comics/02_次のマンガ/</code><br>
+                    <code>comics/10_最後のマンガ/</code><br>
+                    → サイト上では番号が外れ、「最初のマンガ」「次のマンガ」「最後のマンガ」の順で表示されます。
+                </p>
+                <p class="note danger">
+                    <strong>悪い例（一部の作品フォルダにしか番号がない）：</strong><br>
+                    <code>comics/01_最初のマンガ/</code><br>
+                    <code>comics/ふつうのマンガ/</code><br>
+                    → 番号での並び替えは<strong class="highlight">無効</strong>になり、フォルダ名全体の名前順で表示されます。
+                </p>
+
+                <h4>例2：話数の表示順を固定する</h4>
+                <p class="note success">
+                    <strong>良い例（ある作品のすべての話数フォルダに番号を付ける）：</strong><br>
+                    <code>comics/作品名A/01_プロローグ/</code><br>
+                    <code>comics/作品名A/02_旅立ち/</code><br>
+                    → ポップアップでは「プロローグ」「旅立ち」の順で表示されます。
+                </p>
+
+            </section>
+
+            <section>
+                <h2>4. サイト共通設定</h2>
+                <h3>ナビゲーションメニューの編集</h3>
+                <p>
+                    サイト上部のヘッダー内にあるナビゲーションメニューの項目は、<code>header.php</code>ファイルを直接編集することで変更できます。このファイルを変更すると、サイトのすべてのページに反映されます。
+                </p>
+                <div class="code-block">
+...
+&lt;ul class="mobile-menu-links"&gt;
+    &lt;!-- メニュー項目をここに追加・編集してください --&gt;
+    &lt;li&gt;&lt;a href="#"&gt;メニュー項目1&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href="#"&gt;お問い合わせ&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+...
+                </div>
+            </section>
+
+            <section>
+                <h2>5. 命名規則とルール まとめ</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>対象</th>
+                            <th>場所</th>
+                            <th>命名規則・ルール</th>
+                            <th>備考</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>作品フォルダ</strong></td>
+                            <td><code>comics/</code></td>
+                            <td>好きな名前でOK。<br>表示順を固定したい場合は、すべてのフォルダ名を <code>数字_</code> で始める。</td>
+                            <td>この名前がサイトに表示されます。</td>
+                        </tr>
+                        <tr>
+                            <td><strong>作品サムネイル</strong></td>
+                            <td><code>comics/作品名/</code></td>
+                            <td><strong><code>thumbnail</code></strong>, <strong><code>cover</code></strong>, <strong><code>thumb</code></strong> のいずれか。（小文字推奨）</td>
+                            <td><strong>推奨アスペクト比は1:1（正方形）</strong>。無い場合は代替画像が表示されます。</td>
+                        </tr>
+                        <tr>
+                            <td><strong>作品詳細</strong></td>
+                            <td><code>comics/作品名/</code></td>
+                            <td><strong><code>detail.txt</code></strong> というファイル名にする。</td>
+                            <td>このファイルが存在する場合、作品詳細ページに内容が表示されます。改行はそのまま反映されます。</td>
+                        </tr>
+                        <tr>
+                            <td><strong>話数フォルダ</strong></td>
+                            <td><code>comics/作品名/</code></td>
+                            <td>好きな名前でOK。<br>表示順を固定したい場合は、すべての話数フォルダ名を <code>数字_</code> で始める。</td>
+                            <td>桁を揃える（<code>01_</code>, <code>02_</code>）と順番が保証されます。</td>
+                        </tr>
+                         <tr>
+                            <td><strong>話数サムネイル</strong></td>
+                            <td><code>comics/作品名/話数/</code></td>
+                            <td><strong><code>thumbnail</code></strong>, <strong><code>cover</code></strong>, <strong><code>thumb</code></strong> のいずれか。（小文字推奨）</td>
+                            <td><strong>推奨アスペクト比は1:1（正方形）</strong>。無い場合は代替画像が表示されます。</td>
+                        </tr>
+                        <tr>
+                            <td><strong>漫画ページ画像</strong></td>
+                            <td><code>comics/作品名/話数/</code></td>
+                            <td><strong>連番の名前にする。</strong><br>（推奨：<code>001.jpg</code>, <code>002.jpg</code>...のように3桁で桁を揃える）</td>
+                            <td>サムネイル用のファイル（<code>thumbnail.jpg</code>等）は、漫画ページとしては表示されません。</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+             <section>
+                <h2>6. よくある質問（Q&A）</h2>
+
+                <h3>Q. 漫画を追加したのにサイトに表示されません。</h3>
+                <p>
+                    <strong>A.</strong> フォルダの場所が間違っている可能性があります。<code>comics</code> フォルダの中に正しく配置されているか、上記の「2. コンテンツの追加と管理」の構成と見比べて確認してください。
+                </p>
+
+                <h3>Q. サムネイルが表示されません。</h3>
+                <p>
+                    <strong>A.</strong> 以下の2点を確認してください。
+                    <ol>
+                        <li>ファイル名が <code>thumbnail</code>, <code>cover</code>, <code>thumb</code> のいずれか（小文字）になっていますか？</li>
+                        <li>サムネイル画像は、対象のフォルダ（作品フォルダ または 話数フォルダ）の<strong>直下</strong>に置かれていますか？</li>
+                    </ol>
+                </p>
+
+                <h3>Q. 作品詳細ページに内容が表示されません。</h3>
+                <p>
+                    <strong>A.</strong> 作品フォルダの直下に、ファイル名が<strong><code>detail.txt</code></strong>となっているテキストファイルが正しく配置されているか確認してください。
+                </p>
+
+                <h3>Q. 作品や話の表示順を自由に決めたいです。</h3>
+                <p>
+                    <strong>A.</strong> 上記の「3. 表示順のカスタム設定」を参照してください。表示順を固定したい階層（例: `comics/`直下）にある<strong>すべてのフォルダ名</strong>の先頭に `数字_` を付ける必要があります。
+                </p>
+
+                <h3>Q. ページの順番がバラバラになってしまいます。</h3>
+                <p>
+                    <strong>A.</strong> 漫画の画像ファイル名が正しく連番になっていない可能性があります。<code>1.jpg</code>, <code>2.jpg</code>, ..., `10.jpg` のような名前だと、コンピュータは<code>10.jpg</code>を<code>2.jpg</code>より先に並べてしまうことがあります。これを防ぐために、<code>01.jpg</code>, <code>02.jpg</code> や `001.jpg`, `002.jpg` のように桁数を揃えることを強く推奨します。
+                </p>
+            </section>
+        </main>
+    </div>
+</body>
+</html>
