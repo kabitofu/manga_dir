@@ -36,8 +36,9 @@ function getSortedDirectories($dirPath) {
 
 // === GETパラメータの取得 ===
 $comicsDir = 'comics/';
-$seriesPathName = isset($_GET['title']) ? trim($_GET['title']) : '';
-$currentEpisode = isset($_GET['episode']) ? trim($_GET['episode']) : '';
+// basename() を使って、パス情報を強制的に除去する
+$seriesPathName = isset($_GET['title']) ? basename(trim($_GET['title'])) : '';
+$currentEpisode = isset($_GET['episode']) ? basename(trim($_GET['episode'])) : '';
 $seriesDisplayName = preg_replace('/^\d+_/', '', $seriesPathName);
 $fullSeriesDir = $comicsDir . $seriesPathName . '/';
 
