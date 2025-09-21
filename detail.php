@@ -40,7 +40,9 @@ $episodes_per_page = 20;
 // === GETパラメータの取得 ===
 $comicsDir = 'comics/';
 // basename() を使って、パス情報を強制的に除去する
-$seriesPathName = isset($_GET['title']) ? basename(trim($_GET['title'])) : '';
+$tempPathName = isset($_GET['title']) ? trim($_GET['title']) : '';
+// '..' や '/' を取り除き、ディレクトリトラバーサルを防ぐ
+$seriesPathName = str_replace(['..', '/'], '', $tempPathName);
 $currentPage = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
 $sortOrder = isset($_GET['sort']) && $_GET['sort'] === 'desc' ? 'desc' : 'asc'; // ★ ソート順を取得
 $seriesDisplayName = preg_replace('/^\d+_/', '', $seriesPathName);
