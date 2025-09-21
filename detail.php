@@ -294,6 +294,22 @@ $episodesForCurrentPage = array_slice($allEpisodes, ($currentPage - 1) * $episod
             word-break: break-all;
         }
 
+        /* タイトルと日付をまとめるラッパー */
+        .episode-card-info {
+            display: flex;
+            flex-direction: column; /* 子要素（タイトルと日付）を縦に並べる */
+            justify-content: center;
+            min-width: 0; /* flexアイテム内でのテキストの折り返しに重要 */
+            flex-grow: 1; /* 残りのスペースを埋める */
+        }
+
+        /* 公開日用のスタイル */
+        .episode-card-date {
+            font-size: 0.8rem;
+            color: #64748b; /* 少し薄いグレー */
+            margin-top: 4px; /* タイトルとの間に少しスペースを空ける */
+        }
+
         .pagination {
             display: flex;
             justify-content: center;
@@ -364,11 +380,15 @@ $episodesForCurrentPage = array_slice($allEpisodes, ($currentPage - 1) * $episod
                             $fullEpisodeDir = $fullSeriesDir . $episode['path_name'] . '/';
                             $episodeThumbnailFiles = glob($fullEpisodeDir . '{thumbnail,cover,thumb}.{jpg,jpeg,png,gif,webp}', GLOB_BRACE);
                             $episodeThumbnailPath = !empty($episodeThumbnailFiles) ? $episodeThumbnailFiles[0] : 'https://placehold.co/100x100/e2e8f0/334155?text=No+Image';
+                            $episodeDate = date('Y/m/d', filemtime($fullEpisodeDir));
                             $link = 'viewer.php?title=' . urlencode($seriesPathName) . '&episode=' . urlencode($episode['path_name']);
                         ?>
                             <a href="<?php echo $link; ?>" class="episode-card">
                                 <img src="<?php echo htmlspecialchars($episodeThumbnailPath, ENT_QUOTES, 'UTF-8'); ?>" class="episode-card-thumb">
-                                <span class="episode-card-title"><?php echo htmlspecialchars($episode['display_name'], ENT_QUOTES, 'UTF-8'); ?></span>
+                                <div class="episode-card-info">
+                                    <span class="episode-card-title"><?php echo htmlspecialchars($episode['display_name'], ENT_QUOTES, 'UTF-8'); ?></span>
+                                    <span class="episode-card-date"><?php echo $episodeDate; ?> 公開</span>
+                                </div>
                             </a>
                         <?php endforeach; ?>
                     </div>

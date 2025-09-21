@@ -293,6 +293,7 @@
 
         .episode-list a {
             display: flex;
+            flex-direction: row;
             align-items: center;
             padding: 0.75rem 1.5rem;
             text-decoration: none;
@@ -312,6 +313,11 @@
             background-color: var(--border-color);
             flex-shrink: 0;
         }
+        .episode-info {
+            display: flex;
+            flex-direction: column; /* 子要素（タイトルと日付）を縦に並べる */
+            justify-content: center;
+        }
         .episode-title-text {
             display: -webkit-box;
             -webkit-box-orient: vertical;
@@ -322,6 +328,11 @@
             font-weight: bold;
             color: var(--theme-color);
             word-break: break-all;
+        }
+        .episode-date-text {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-top: 4px;
         }
 
         .custom-scrollbar-track {
@@ -434,7 +445,8 @@
                             $episodesForJson[] = [
                                 'display' => $episode['display_name'],
                                 'original' => $episode['path_name'],
-                                'thumbnail' => $episodeThumbnailPath
+                                'thumbnail' => $episodeThumbnailPath,
+                                'date' => date('Y/m/d', filemtime($fullEpisodeDir))
                             ];
                         }
 
@@ -519,7 +531,10 @@
                         li.innerHTML = `
                             <a href="${link}">
                                 <img src="${ep.thumbnail}" alt="" class="episode-thumbnail">
-                                <span class="episode-title-text">${ep.display}</span>
+                                <div class="episode-info">
+                                    <span class="episode-title-text">${ep.display}</span>
+                                    <span class="episode-date-text">${ep.date} 公開</span>
+                                </div>
                             </a>`;
                         modalEpisodeList.appendChild(li);
                     });
